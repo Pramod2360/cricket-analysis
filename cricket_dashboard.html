@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Analysis Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, rgba(173, 216, 230, 0.6), rgba(240, 248, 255, 0.6));
+            backdrop-filter: blur(10px);
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            background: rgba(255, 255, 255, 0.3);
+        }
+        #charts div {
+            width: 40%;
+            display: inline-block;
+            margin: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Cricket Analysis Dashboard</h2>
+        <input type="file" id="fileInput" accept=".json">
+        <div id="charts">
+            <div id="winningTeams"></div>
+            <div id="topScorers"></div>
+            <div id="bestBowlers"></div>
+            <div id="headToHead"></div>
+            <div id="scatterPlot" style="width: 80%;"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = JSON.parse(e.target.result);
+                    generateCharts(data);
+                };
+                reader.readAsText(file);
+            }
+        });
+        
+        function generateCharts(data) {
+            const teams = {};
+            const topScorers = [];
+            const bestBowlers = [];
+            const headToHead = {};
+            const scatterData = [];
+            
+            data.forEach(match => {
+                teams[match["Winning Team"]] = (teams[match["Winning Team"]] || 0) + 1;
+                topScorers.push({ player: match["Top Scorer"], runs: match["Top Scorer Runs"] });
+                bestBowlers.push({ bowler: match["Best Bowler"], wickets: match["Wickets Taken"] });
+                scatterData.push({ runs: match["Top Scorer Runs"], wickets: match["Wickets Taken"] });
+                
+                let key = `${match["Team 1"]} vs ${match["Team 2"]}`;
+                headToHead[key] = headToHead[key] || { [match["Team 1"]]: 0, [match["Team 2"]]: 0 };
+                headToHead[key][match["Winning Team"]]++;
+            });
+            
+            Plotly.newPlot('winningTeams', [{
+                labels: Object.keys(teams),
+                values: Object.values(teams),
+                type: 'pie'
+            }], { title: 'Winning Team Distribution' });
+            
+            Plotly.newPlot('topScorers', [{
+                x: topScorers.map(d => d.player),
+                y: topScorers.map(d => d.runs),
+                type: 'bar'
+            }], { title: 'Top Scorer Runs' });
+            
+            Plotly.newPlot('bestBowlers', [{
+                y: bestBowlers.map(d => d.bowler),
+                x: bestBowlers.map(d => d.wickets),
+                type: 'bar',
+                orientation: 'h'
+            }], { title: 'Best Bowlers (Wickets Taken)' });
+            
+            const headToHeadTraces = Object.keys(headToHead).map(match => ({
+                x: Object.keys(headToHead[match]),
+                y: Object.values(headToHead[match]),
+                name: match,
+                type: 'bar'
+            }));
+            Plotly.newPlot('headToHead', headToHeadTraces, { barmode: 'stack', title: 'Head-to-Head Match Outcomes' });
+            
+            Plotly.newPlot('scatterPlot', [{
+                x: scatterData.map(d => d.runs),
+                y: scatterData.map(d => d.wickets),
+                mode: 'markers',
+                type: 'scatter'
+            }], { title: 'Runs vs Wickets' });
+        }
+    </script>
+</body>
+</html>

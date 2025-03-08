@@ -1,0 +1,52 @@
+[
+  {
+    "Match": "Match 1",
+    "Team 1": "India",
+    "Team 2": "Pakistan",
+    "Winning Team": "India",
+    "Top Scorer": "Virat Kohli",
+    "Top Scorer Runs": 85,
+    "Best Bowler": "Jasprit Bumrah",
+    "Wickets Taken": 3
+  },
+  {
+    "Match": "Match 2",
+    "Team 1": "Australia",
+    "Team 2": "India",
+    "Winning Team": "India",
+    "Top Scorer": "Rohit Sharma",
+    "Top Scorer Runs": 102,
+    "Best Bowler": "Pat Cummins",
+    "Wickets Taken": 4
+  },
+  {
+    "Match": "Match 3",
+    "Team 1": "England",
+    "Team 2": "Australia",
+    "Winning Team": "Australia",
+    "Top Scorer": "David Warner",
+    "Top Scorer Runs": 95,
+    "Best Bowler": "Jofra Archer",
+    "Wickets Taken": 2
+  },
+  {
+    "Match": "Match 4",
+    "Team 1": "Pakistan",
+    "Team 2": "South Africa",
+    "Winning Team": "Pakistan",
+    "Top Scorer": "Babar Azam",
+    "Top Scorer Runs": 88,
+    "Best Bowler": "Shaheen Afridi",
+    "Wickets Taken": 5
+  },
+  {
+    "Match": "Match 5",
+    "Team 1": "South Africa",
+    "Team 2": "England",
+    "Winning Team": "South Africa",
+    "Top Scorer": "Quinton de Kock",
+    "Top Scorer Runs": 76,
+    "Best Bowler": "Kagiso Rabada",
+    "Wickets Taken": 3
+  }
+]
